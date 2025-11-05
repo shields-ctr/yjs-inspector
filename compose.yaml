@@ -1,0 +1,33 @@
+name: ircsom-monitor
+services:
+
+  inspector:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "4173:4173"
+    networks:
+      - default
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      # - 8000:8000 # TCP external access
+      - 9000:9000 # http
+      # - 9443:9443 # https
+    # environment:
+    #   VIRTUAL_HOST: portainer.local
+    #   VIRTUAL_PORT: 9000
+    networks:
+      - default
+
+volumes:
+  portainer_data:
+
+networks:
+  default:
+    driver: bridge
