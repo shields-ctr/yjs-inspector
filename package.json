@@ -11,7 +11,11 @@
     "host": "vite preview --host",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "typeCheck": "tsc --noEmit"
+    "typeCheck": "tsc --noEmit",
+
+    "container": "docker build -t yjs-inspector .",
+    "preexport": "docker save portainer/portainer-ce:latest | gzip > export/portainer-ce.tar.gz",
+    "export": "docker save yjs-inspector:latest | gzip > export/yjs-inspector.tar.gz"
   },
   "dependencies": {
     "@blocksuite/sync": "^0.22.4",

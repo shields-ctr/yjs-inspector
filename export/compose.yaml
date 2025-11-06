@@ -1,0 +1,42 @@
+name: ircsom-monitor
+services:
+
+  inspector:
+    image: yjs-inspector:latest
+    pull_policy: never
+    restart: unless-stopped
+    ports:
+      - "4173:4173"
+    networks:
+      - default
+
+  portainer:
+    image: portainer-ce:latest
+    pull_policy: never
+    restart: unless-stopped
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      # - 8000:8000 # TCP external access
+      - 9000:9000 # http
+      # - 9443:9443 # https
+    # environment:
+    #   VIRTUAL_HOST: portainer.local
+    #   VIRTUAL_PORT: 9000
+    networks:
+      - default
+
+volumes:
+  portainer_data:
+
+networks:
+  default:
+    driver: bridge
+
+
+# docker build -t yjs-inspector .
+# docker save yjs-inspector:latest | gzip > export/yjs-inspector.tar.gz
+# docker save portainer/portainer-ce:latest | gzip > export/portainer-ce.tar.gz
+# docker image load -i export/yjs-inspector.tar.gz
+# docker image load -i export/portainer-ce.tar.gz
