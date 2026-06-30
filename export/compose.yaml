@@ -11,7 +11,7 @@ services:
       - default
 
   portainer:
-    image: portainer-ce:latest
+    image: portainer/portainer-ce:latest
     pull_policy: never
     restart: unless-stopped
     volumes:
