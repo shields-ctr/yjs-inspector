@@ -49,9 +49,14 @@ export const schema = z.object({
 
 export type YShapeItem = z.infer<typeof schema>;
 
+const EMPTY_ARRAY = [] as const;
+
 const likeFn = defineTypedFn({
   name: "Likes",
-  define: z.function().args(z.unknown(), z.string()).returns(z.boolean()),
+  define: z.function({
+    input: [z.unknown(), z.string()],
+    output: z.boolean(),
+  }),
   implement: (value, string) => {
     if (typeof value === "string") {
       return value.includes(string);
@@ -84,7 +89,7 @@ const componentsSpec = {
     );
     return <Input className="min-w-32" onChange={handleChange} {...props} />;
   },
-  Select: ({ value, onChange, options = [], className, disabled }) => {
+  Select: ({ value, onChange, options = EMPTY_ARRAY, className, disabled }) => {
     const selectedIdx = options.findIndex((option) => option.value === value);
     const handleChange = useCallback(
       (value: string) => {
@@ -112,7 +117,11 @@ const componentsSpec = {
       </Select>
     );
   },
-  MultipleSelect: ({ value = [], options = [], onChange }) => {
+  MultipleSelect: ({
+    value = EMPTY_ARRAY,
+    options = EMPTY_ARRAY,
+    onChange,
+  }) => {
     const selectedIndices = value.map((val) =>
       String(options.findIndex((option) => option.value === val)),
     );
